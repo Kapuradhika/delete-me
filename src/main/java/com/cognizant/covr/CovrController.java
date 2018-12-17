@@ -23,5 +23,10 @@ final class CovrController {
 		return newItem;
 
 	}
+
+	@GetMapping("/employees")
+	Iterable<String> getEmployeeList() {
+		return Collections.singletonList("radhika");
+	}
 }
 

@@ -1,6 +1,7 @@
 /* See the file "LICENSE" for the full license governing this code. */
 package com.cognizant.covr;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +13,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -70,4 +74,21 @@ public final class CovrControllerTest {
 		assertThat(content, is("{id='1', text='TEXT'}"));
 	}
 
+	@Test
+	public void returnsEmployeeList() throws Exception {
+		// Setup
+		List<String> expected = Arrays.asList("radhika");
+
+		//Exercise
+		final String content = mockMvc.perform(get("/employees"))
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+
+		final List<String> actual = OBJECT_MAPPER.readValue(content,new TypeReference<List<String>>(){});
+
+		// Assert
+		assertThat(actual, is(expected));
+	}
 }
